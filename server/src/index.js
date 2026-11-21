@@ -17,7 +17,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "..", "..");
 const DIST = join(ROOT, "web", "dist");
 const PORT = Number(process.env.PORT || 3000);
-const HOST = process.env.HOST || "127.0.0.1";
+const HOST = process.env.HOST || "0.0.0.0";
 const engine = engineFrom(process.env.VIRODH_ENGINE_URL || "http://127.0.0.1:8000");
 const db = openDb(process.env.VIRODH_USERS_DB || join(ROOT, "data", "virodh", "users.db"));
 const secureCookies = process.env.VIRODH_SECURE_COOKIES === "1";
