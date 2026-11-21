@@ -2,6 +2,11 @@
 
 from __future__ import annotations
 
+import os
+
+# Prevent OpenMP runtime crash (OMP: Error #15) on Windows with Anaconda/PyTorch/MKL
+os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
+
 import cv2
 import numpy as np
 import torch
