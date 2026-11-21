@@ -11,7 +11,7 @@
   <a href="#-quick-start"><img src="https://img.shields.io/badge/Python-3.11-3776AB.svg?style=flat&logo=python&logoColor=white" alt="Python 3.11" /></a>
   <a href="#-virodh-ai-gateway"><img src="https://img.shields.io/badge/FastAPI-0.115-009688.svg?style=flat&logo=fastapi&logoColor=white" alt="FastAPI" /></a>
   <a href="#-interactive-architecture--call-graph"><img src="https://img.shields.io/badge/Knowledge_Graph-594_Nodes-D4A574.svg?style=flat" alt="594 Nodes" /></a>
-  <a href="#-evaluation-metrics--benchmarks"><img src="https://img.shields.io/badge/OmniSafeBench-Integrated-8A2BE2.svg?style=flat" alt="OmniSafeBench" /></a>
+  <a href="#-evaluation-metrics--benchmarks"><img src="https://img.shields.io/badge/Multimodal-Defense_Benchmark-8A2BE2.svg?style=flat" alt="Multimodal Defense Benchmark" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg?style=flat" alt="License" /></a>
 </p>
 
@@ -114,7 +114,7 @@ Executed concurrently via thread pools across the extracted `AnalysisContext`:
 
 ## 📊 Empirical Evaluation & Benchmark Results
 
-Virodh AI has been evaluated against state-of-the-art multimodal jailbreak benchmarks (including OmniSafeBench-MM, Canary, FigStep, Hades, and MML). Below are the empirical validation metrics:
+Virodh AI has been evaluated against state-of-the-art multimodal jailbreak benchmarks across diverse threat vectors (including Canary, FigStep, Hades, and MML). Below are the empirical validation metrics:
 
 ### 1. Detection Performance by Attack & Target Model
 <p align="center">
@@ -312,7 +312,7 @@ If an injection or multimodal exploit is detected, Virodh intercepts the call an
 │   ├── CALL_GRAPH.md        # Comprehensive function call dependencies & execution traces
 │   └── understanding/       # Understand-Anything knowledge graph & architecture layers
 ├── eval/                    # Evaluation harness, calibration scripts, adversarial loop
-├── evaluators/              # OmniSafeBench safety judges and scoring metrics
+├── evaluators/              # Multimodal safety judges and scoring metrics
 ├── guard/                   # Core Threat Guard inspection firewall
 │   ├── adversarial/         # Sub-pixel noise classifier, gradient perturbation detectors
 │   ├── detectors/           # Injection, harm, composite, and obfuscation detectors
@@ -324,7 +324,7 @@ If an injection or multimodal exploit is detected, Virodh intercepts the call an
 ├── models/                  # VLM client adapters (Google Gemini, Groq Qwen, OpenAI)
 ├── pipeline/                # Batch execution runners (generation, defense, evaluation)
 ├── tests/                   # Automated pytest suites
-├── tg_plugins/              # OmniSafeBench-MM attack, defense, and model plugins
+├── tg_plugins/              # Attack, defense, and model plugins
 ├── virodh/                  # OpenAI-compatible gateway proxy and tenant governance
 ├── run_pipeline.py          # Benchmark CLI entry point
 └── requirements.txt         # Project dependencies
@@ -332,8 +332,6 @@ If an injection or multimodal exploit is detected, Virodh intercepts the call an
 
 ---
 
-## 📜 Attribution & License
+## 📜 License
 
-Virodh AI is built on top of the open-source [OmniSafeBench-MM](https://arxiv.org/abs/2512.06589) multimodal benchmark toolbox. For details regarding upstream components and licenses, see [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md).
-
-Distributed under the **MIT License**. See `LICENSE` for details.
+Distributed under the **MIT License**. See [LICENSE](LICENSE) for details.

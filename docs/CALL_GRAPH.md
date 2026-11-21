@@ -152,7 +152,7 @@ OpenAI-compatible proxy serving production traffic.
 
 ### 2.5 Benchmark & Evaluation Suite (`pipeline/` & `eval/`)
 
-Integrates with OmniSafeBench-MM to benchmark defenses against multimodal jailbreaks.
+Evaluates defenses against multimodal jailbreaks.
 
 | Caller Function | Callee Function | Target File | Purpose |
 | :--- | :--- | :--- | :--- |
