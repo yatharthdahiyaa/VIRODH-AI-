@@ -1,0 +1,5 @@
+name: "canary_faint"
+
+parameters:
+  technique: faint
+  faint_gray: 222

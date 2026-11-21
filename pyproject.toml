@@ -1,0 +1,48 @@
+# Code standard for OUR code (Threat Guard engine, Virodh gateway, plugins, evaluation, scripts, tests).
+# Upstream OmniSafeBench-MM code is excluded and kept as-is (see docs/ATTRIBUTION.md).
+#   .venv\Scripts\ruff check .        lint
+#   .venv\Scripts\ruff format .       format
+#   .venv\Scripts\python -m pytest    tests
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+extend-exclude = [
+  # upstream OmniSafeBench-MM (unmodified apart from one documented bug fix)
+  "attacks", "core", "models", "pipeline", "evaluators", "defenses", "utils", "run_pipeline.py", "config",
+  # not Python we own / generated
+  "output", "data", "logs", "web", "server", "ui", "dashboard", ".ua",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "N", "SIM", "RUF"]
+ignore = [
+  "E501",    # long lines: the formatter wraps code; remaining ones are long string literals / URLs
+  "B008",    # FastAPI idiom: Form()/File()/Depends() in parameter defaults
+  "B905",    # zip(strict=...) — lengths are equal by construction in these call sites
+  "RUF001", "RUF002", "RUF003",  # intentional typographic characters (–, —, ×, “ ”) in user-facing text
+  "N818",    # exception names (Overloaded, BadRequest, CircuitOpen …) are part of the public API
+  "N812", "N814",  # conventional aliases: torch.nn.functional as F, detectors as D, Path as _P
+  "UP042",   # Decision/Trust are str+Enum on purpose (JSON-serialisable values)
+  "SIM108",  # ternaries are not always clearer
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["N802", "B017"]
+"scripts/*" = ["E402"]
+"eval/*" = ["E402"]
+"app/main.py" = ["E402"]
+"virodh/server.py" = ["E402"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["guard", "virodh", "app", "tg_plugins", "tg_bootstrap"]
+known-third-party = ["core", "models", "pipeline", "evaluators", "attacks", "defenses", "config"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore:cannot collect test class 'TestCase':pytest.PytestCollectionWarning"]

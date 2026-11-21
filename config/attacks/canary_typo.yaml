@@ -1,0 +1,5 @@
+name: "canary_typo"
+
+parameters:
+  technique: typo
+  faint_gray: 222

@@ -1,0 +1,21 @@
+# Never ship environments, secrets, local databases or harmful evaluation material in the image.
+.venv/
+**/__pycache__/
+*.pyc
+.env
+.env.*
+*.db
+*.db-wal
+*.db-shm
+logs/
+output/
+data/raw/
+data/behaviors/
+data/adversarial/
+data/model_validation/
+data/demo_extra/
+data/cache/
+data/virodh/
+eval/reports/app_test/
+.pytest_cache/
+.git/

@@ -1,0 +1,185 @@
+{
+ "thresholds": {
+  "iter3": 0.5278,
+  "iter4": 0.7139
+ },
+ "n_sources": 100,
+ "results": {
+  "attack: fgsm_eps1": {
+   "n": 100,
+   "iter3": {
+    "flagged": 17,
+    "rate": 0.17
+   },
+   "iter4": {
+    "flagged": 3,
+    "rate": 0.03
+   }
+  },
+  "attack: fgsm_eps16": {
+   "n": 100,
+   "iter3": {
+    "flagged": 98,
+    "rate": 0.98
+   },
+   "iter4": {
+    "flagged": 98,
+    "rate": 0.98
+   }
+  },
+  "attack: pgd_eps2_10steps": {
+   "n": 100,
+   "iter3": {
+    "flagged": 88,
+    "rate": 0.88
+   },
+   "iter4": {
+    "flagged": 27,
+    "rate": 0.27
+   }
+  },
+  "attack: pgd_eps8_no_random_start": {
+   "n": 100,
+   "iter3": {
+    "flagged": 100,
+    "rate": 1.0
+   },
+   "iter4": {
+    "flagged": 100,
+    "rate": 1.0
+   }
+  },
+  "benign: NEW grey_noise_0.02": {
+   "n": 100,
+   "iter3": {
+    "flagged": 100,
+    "rate": 1.0
+   },
+   "iter4": {
+    "flagged": 41,
+    "rate": 0.41
+   }
+  },
+  "benign: NEW noise+jpeg85": {
+   "n": 100,
+   "iter3": {
+    "flagged": 36,
+    "rate": 0.36
+   },
+   "iter4": {
+    "flagged": 16,
+    "rate": 0.16
+   }
+  },
+  "benign: NEW shot_noise": {
+   "n": 100,
+   "iter3": {
+    "flagged": 48,
+    "rate": 0.48
+   },
+   "iter4": {
+    "flagged": 10,
+    "rate": 0.1
+   }
+  },
+  "benign: NEW uniform_0.03": {
+   "n": 100,
+   "iter3": {
+    "flagged": 41,
+    "rate": 0.41
+   },
+   "iter4": {
+    "flagged": 6,
+    "rate": 0.06
+   }
+  },
+  "benign: bicubic_up_down": {
+   "n": 100,
+   "iter3": {
+    "flagged": 1,
+    "rate": 0.01
+   },
+   "iter4": {
+    "flagged": 1,
+    "rate": 0.01
+   }
+  },
+  "benign: blur_3x3": {
+   "n": 100,
+   "iter3": {
+    "flagged": 0,
+    "rate": 0.0
+   },
+   "iter4": {
+    "flagged": 0,
+    "rate": 0.0
+   }
+  },
+  "benign: contrast_0.8_bright+0.05": {
+   "n": 100,
+   "iter3": {
+    "flagged": 1,
+    "rate": 0.01
+   },
+   "iter4": {
+    "flagged": 1,
+    "rate": 0.01
+   }
+  },
+  "benign: gauss_0.01": {
+   "n": 100,
+   "iter3": {
+    "flagged": 74,
+    "rate": 0.74
+   },
+   "iter4": {
+    "flagged": 50,
+    "rate": 0.5
+   }
+  },
+  "benign: gauss_0.05": {
+   "n": 100,
+   "iter3": {
+    "flagged": 0,
+    "rate": 0.0
+   },
+   "iter4": {
+    "flagged": 0,
+    "rate": 0.0
+   }
+  },
+  "benign: jpeg_q30": {
+   "n": 100,
+   "iter3": {
+    "flagged": 0,
+    "rate": 0.0
+   },
+   "iter4": {
+    "flagged": 0,
+    "rate": 0.0
+   }
+  },
+  "benign: jpeg_q90": {
+   "n": 100,
+   "iter3": {
+    "flagged": 3,
+    "rate": 0.03
+   },
+   "iter4": {
+    "flagged": 2,
+    "rate": 0.02
+   }
+  },
+  "benign: speckle_1%": {
+   "n": 100,
+   "iter3": {
+    "flagged": 4,
+    "rate": 0.04
+   },
+   "iter4": {
+    "flagged": 8,
+    "rate": 0.08
+   }
+  }
+ }
+}

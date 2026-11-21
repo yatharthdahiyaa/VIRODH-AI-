@@ -1,0 +1,68 @@
+# Threat Guard configuration.
+# Weights and thresholds below are STARTING VALUES, not validated numbers.
+# eval/calibrate.py tunes thresholds on the validation split (never on test).
+
+ingress:
+  max_image_bytes: 8388608        # 8 MB
+  max_image_pixels: 40000000
+  allowed_formats: [PNG, JPEG, WEBP]
+  max_prompt_chars: 4000
+  model_input_max_side: 640       # must match tg_plugins/common.py MODEL_INPUT_MAX_SIDE
+
+extraction:
+  ocr_min_confidence: 0.5
+  readability_retry_below: 0.55   # try mirror/rotated views if OCR text looks unreadable...
+  retry_max_confidence: 0.90      # ...and OCR itself was unsure (clear code/base64 text is not retried)
+  low_contrast_max: 0.30          # OCR lines below this ink contrast are flagged as near-invisible
+  document_white_ratio: 0.40      # only document-like images get the faint-text boost pass
+  faint_pixel_min: 400            # ...and only if this many isolated light-grey pixels exist
+  faint_threshold: 250            # grey levels below this become ink in the boost view
+
+llm:
+  base_url: "https://api.groq.com/openai/v1"
+  api_key_env: "GROQ_API_KEY"
+  timeout_s: 20
+  injection_model: "meta-llama/llama-prompt-guard-2-86m"   # 14,400 req/min on Groq
+  # Policy classifier, tried in order; on rate limit / error the next one is used immediately.
+  # (gpt-oss-safeguard-20b is only 3 req/min on Groq's on-demand tier, so it is not in the chain.)
+  harm_models:
+    - {base_url: "https://api.groq.com/openai/v1", api_key_env: GROQ_API_KEY, model: "openai/gpt-oss-20b", reasoning_effort: low}
+    - {base_url: "https://api.groq.com/openai/v1", api_key_env: GROQ_API_KEY, model: "openai/gpt-oss-120b", reasoning_effort: low}
+    - {base_url: "https://generativelanguage.googleapis.com/v1beta/openai/", api_key_env: GEMINI_API_KEY, model: "gemini-3.5-flash-lite"}
+    - {base_url: "https://openrouter.ai/api/v1", api_key_env: OPENROUTER_API_KEY, model: "nvidia/nemotron-3.5-lightning:free"}
+  # Live API: fail fast (fail-safe REVIEW). Batch evaluation (eval/scan_cases.py) overrides these to WAIT
+  # for rate limits instead, so evaluation results are not polluted by quota errors.
+  rate_limit_rounds: 0
+  rate_limit_wait_s: 20
+
+detectors:                        # required: if it errors, the request cannot be ALLOWed
+  injection:      {enabled: true, required: true,  weight: 1.0}
+  harm:           {enabled: true, required: true,  weight: 1.0}
+  composite:      {enabled: true, required: false, weight: 1.0}
+  obfuscation:    {enabled: true, required: false, weight: 0.6}
+
+adversarial:
+  # Independent adversarial-image engine (guard/adversarial). Runs next to the multimodal engine in /api/scan.
+  enabled_in_scan: true
+  can_block: false          # on its own it may raise ALLOW -> REVIEW, never BLOCK (natural false positives;
+                            # results on the local ResNet18 are not proof of an attack on the target VLM)
+
+demo:
+  # Research/demo mode for a LOCAL presentation: lets the dashboard's "compare with unguarded model"
+  # also run for requests the guard judged harmful, so judges can see what the unprotected model says.
+  # Output is truncated and blurred until the presenter clicks "Reveal". Never enable on a public server.
+  show_unguarded_harmful: true
+  max_chars: 400
+  # Save each live scan (prompt, decision, guarded + unguarded replies) to logs/live_responses.jsonl and
+  # show it under Analytics → Recent requests. Local demo only: this stores prompts and model replies.
+  save_live_responses: true
+  never_for: [weapon, bomb, explosive, firearm, gun, poison, toxin, self-harm, suicide, child, minor,
+              malware, ransomware, drug, narcotic, terror]
+
+policy:
+  profile: balanced               # balanced | strict (strict only ever lowers thresholds)
+  thresholds:                     # risk in [0,1] — set by eval/calibrate.py on the VALIDATION split
+    review: 0.42                  # middle of plateau 0.31–0.53 (was 0.45)
+    block: 0.63                   # middle of plateau 0.62–0.64 (was 0.75)
+  floors:
+    image_injection_min_score: 0.85   # instruction to the AI inside the image → at least REVIEW (BLOCK if hidden)

@@ -1,0 +1,12 @@
+diff --git a/attacks/mml/attack.py b/attacks/mml/attack.py
+index 24ad6cc..4ac2c4f 100644
+--- a/attacks/mml/attack.py
++++ b/attacks/mml/attack.py
+@@ -189,6 +189,7 @@ class MMLAttack(BaseAttack):
+             )
+         elif self.cfg.aug_type == "base64":
+             # Generate base64 image
++            res = utils.text_transformers(original_prompt)  # [threat-guard patch] `res` was undefined here upstream
+             base64_src = res.get("base64_prompt", original_prompt)
+             base64_img = gen_image_from_text(
+                 base64_src,

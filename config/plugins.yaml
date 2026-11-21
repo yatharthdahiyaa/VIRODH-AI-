@@ -1,0 +1,39 @@
+version: 1
+
+# Plugin registry (upstream OmniSafeBench-MM format).
+# name -> [python_module_path, class_name]
+# UPSTREAM = code copied unmodified from OmniSafeBench-MM; OURS = tg_plugins/
+plugins:
+  attacks:
+    # --- published attacks (faithful upstream implementations) ---
+    figstep: [attacks.figstep.attack, FigStepAttack]            # UPSTREAM
+    mml_wr: [attacks.mml.attack, MMLAttack]                     # UPSTREAM (word replacement)
+    mml_base64: [attacks.mml.attack, MMLAttack]                 # UPSTREAM
+    mml_mirror: [attacks.mml.attack, MMLAttack]                 # UPSTREAM
+    mml_rotation: [attacks.mml.attack, MMLAttack]               # UPSTREAM
+    # hades: [attacks.hades.attack, HadesAttack]                # UPSTREAM (stretch: needs torch+diffusers)
+    # --- our synthetic attacks ---
+    qr_code: [tg_plugins.attacks.qr_code, QRCodeAttack]         # OURS: harmful request inside a QR code
+    canary_typo: [tg_plugins.attacks.canary, CanaryAttack]      # OURS: harmless hijack, printed sign
+    canary_faint: [tg_plugins.attacks.canary, CanaryAttack]     # OURS: harmless hijack, faint text in resume
+    canary_qr: [tg_plugins.attacks.canary, CanaryAttack]        # OURS: harmless hijack, QR code
+    passthrough: [tg_plugins.attacks.passthrough, PassthroughAttack]  # OURS: benign samples unchanged
+
+  models:
+    # Plain targets: upstream OpenAIModel + image downscaling + fail-loud image loading
+    groq: [tg_plugins.models.app_model, CompactVLMModel]
+    gemini: [tg_plugins.models.app_model, CompactVLMModel]
+    openrouter: [tg_plugins.models.app_model, CompactVLMModel]
+    # "App" targets: same + app-side QR scanner (decoded QR text appended to the prompt)
+    groq_app: [tg_plugins.models.app_model, AppVLMModel]
+    gemini_app: [tg_plugins.models.app_model, AppVLMModel]
+    openrouter_app: [tg_plugins.models.app_model, AppVLMModel]
+    openai: [models.openai_model, OpenAIModel]                  # UPSTREAM
+    any: [models.openai_model, OpenAIModel]                     # UPSTREAM
+
+  defenses:
+    adashield: [defenses.adashield, AdaShieldDefense]           # UPSTREAM baseline
+    threat_guard: [tg_plugins.defenses.threat_guard, ThreatGuardDefense]     # OURS
+
+  evaluators:
+    default_judge: [evaluators.default_judge, DefaultJudge]     # UPSTREAM

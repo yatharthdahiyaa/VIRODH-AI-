@@ -1,0 +1,95 @@
+# Model configuration (upstream OmniSafeBench-MM format).
+# API keys are ${ENV_VAR} placeholders, expanded by tg_bootstrap.py at load time.
+# Never write a real key in this file.
+
+providers:
+  groq:
+    api_key: "${GROQ_API_KEY}"
+    base_url: "https://api.groq.com/openai/v1"
+    models:
+      # Target vision-language model (verified: reads text in images)
+      qwen3.8-27b:
+        model_name: "qwen/qwen3.8-27b"
+        max_tokens: 500          # Groq on-demand limit: 8,000 tokens/min for this model
+        temperature: 0.0
+      # Judge / auxiliary LLM (text only)
+      gpt-oss-120b:
+        model_name: "openai/gpt-oss-120b"
+        max_tokens: 2000
+        temperature: 0.0
+      # Policy-based safety classifier (guard detector candidate)
+      gpt-oss-safeguard-20b:
+        model_name: "openai/gpt-oss-safeguard-20b"
+        max_tokens: 1000
+        temperature: 0.0
+      # Prompt-injection classifier; returns a probability as text (guard detector)
+      prompt-guard-86m:
+        model_name: "meta-llama/llama-prompt-guard-2-86m"
+        max_tokens: 16
+        temperature: 0.0
+
+  # Google Gemini, free tier, via its OpenAI-compatible endpoint (upstream OpenAIModel works unchanged).
+  # Verified 2026-11-21: 3.5/3.1 flash-lite read image text; 3.5/3.6 flash returned 503 "high demand".
+  # Free-tier prompts may be used by Google for training — never send personal data.
+  gemini:
+    api_key: "${GEMINI_API_KEY}"
+    base_url: "https://generativelanguage.googleapis.com/v1beta/openai/"
+    models:
+      gemini-3.5-flash-lite:
+        model_name: "gemini-3.5-flash-lite"
+        max_tokens: 500
+        temperature: 0.0
+      gemini-3.1-flash-lite:
+        model_name: "gemini-3.1-flash-lite"
+        max_tokens: 500
+        temperature: 0.0
+
+  # OpenRouter, free tier (":free" models are shared and often rate-limited upstream).
+  openrouter:
+    api_key: "${OPENROUTER_API_KEY}"
+    base_url: "https://openrouter.ai/api/v1"
+    models:
+      nemotron-3.5-super-vl:
+        model_name: "nvidia/nemotron-3.5-super-vl:free"
+        max_tokens: 1500      # reasoning model (see -app entry)
+        temperature: 0.0
+      gemma-4-26b:
+        model_name: "google/gemma-4-26b-a4b-it:free"
+        max_tokens: 500
+        temperature: 0.0
+
+  # ---- "App" targets: same models + an app-side QR scanner (tg_plugins/models/app_model.py).
+  # These are the targets used in benchmark runs and the live demo.
+  groq_app:
+    api_key: "${GROQ_API_KEY}"
+    base_url: "https://api.groq.com/openai/v1"
+    models:
+      qwen3.8-27b-app:
+        model_name: "qwen/qwen3.8-27b"
+        max_tokens: 500
+        temperature: 0.0
+  gemini_app:
+    api_key: "${GEMINI_API_KEY}"
+    base_url: "https://generativelanguage.googleapis.com/v1beta/openai/"
+    models:
+      gemini-3.5-flash-lite-app:
+        model_name: "gemini-3.5-flash-lite"
+        max_tokens: 500
+        temperature: 0.0
+      gemini-3.1-flash-lite-app:
+        model_name: "gemini-3.1-flash-lite"
+        max_tokens: 500
+        temperature: 0.0
+  openrouter_app:
+    api_key: "${OPENROUTER_API_KEY}"
+    base_url: "https://openrouter.ai/api/v1"
+    models:
+      nemotron-3.5-super-vl-app:
+        model_name: "nvidia/nemotron-3.5-super-vl:free"
+        max_tokens: 1500      # reasoning model: ~400+ hidden reasoning tokens come first; 500 left empty replies
+        temperature: 0.0
+
+defaults:
+  max_tokens: 1000
+  temperature: 0.0
+  log_level: "INFO"

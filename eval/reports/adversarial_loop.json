@@ -1,0 +1,382 @@
+{
+ "rule": "designed/fitted on train, threshold on val (benign flag rate <= 5%), reported on test",
+ "iterations": [
+  {
+   "iteration": "iter0_baseline",
+   "threshold": 0.8049,
+   "notes": "4 hand-made detectors (statistical, frequency, consistency, local region)",
+   "detection_rate": 0.092,
+   "false_positive_rate": 0.032,
+   "n_adv": 500,
+   "n_benign": 400,
+   "per_category": {
+    "clean": {
+     "flagged": 2,
+     "n": 100,
+     "rate": 0.02
+    },
+    "fgsm_eps2": {
+     "flagged": 9,
+     "n": 100,
+     "rate": 0.09
+    },
+    "fgsm_eps4": {
+     "flagged": 11,
+     "n": 100,
+     "rate": 0.11
+    },
+    "fgsm_eps8": {
+     "flagged": 8,
+     "n": 100,
+     "rate": 0.08
+    },
+    "gaussian_noise": {
+     "flagged": 11,
+     "n": 100,
+     "rate": 0.11
+    },
+    "jpeg_q50": {
+     "flagged": 0,
+     "n": 100,
+     "rate": 0.0
+    },
+    "pgd_eps4": {
+     "flagged": 9,
+     "n": 100,
+     "rate": 0.09
+    },
+    "pgd_eps8": {
+     "flagged": 9,
+     "n": 100,
+     "rate": 0.09
+    },
+    "resize_0.5x": {
+     "flagged": 0,
+     "n": 100,
+     "rate": 0.0
+    }
+   },
+   "patterns": {
+    "detected_by_strongest_detector": {
+     "consistency": 43,
+     "statistical": 1,
+     "local_region": 1,
+     "frequency": 1
+    }
+   }
+  },
+  {
+   "iteration": "iter1_saturation",
+   "threshold": 0.833,
+   "notes": "baseline + saturation detector (train clean conf p99=0.985, log10 grad p1=-3.25)",
+   "detection_rate": 0.328,
+   "false_positive_rate": 0.02,
+   "n_adv": 500,
+   "n_benign": 400,
+   "per_category": {
+    "clean": {
+     "flagged": 3,
+     "n": 100,
+     "rate": 0.03
+    },
+    "fgsm_eps2": {
+     "flagged": 9,
+     "n": 100,
+     "rate": 0.09
+    },
+    "fgsm_eps4": {
+     "flagged": 11,
+     "n": 100,
+     "rate": 0.11
+    },
+    "fgsm_eps8": {
+     "flagged": 7,
+     "n": 100,
+     "rate": 0.07
+    },
+    "gaussian_noise": {
+     "flagged": 5,
+     "n": 100,
+     "rate": 0.05
+    },
+    "jpeg_q50": {
+     "flagged": 0,
+     "n": 100,
+     "rate": 0.0
+    },
+    "pgd_eps4": {
+     "flagged": 69,
+     "n": 100,
+     "rate": 0.69
+    },
+    "pgd_eps8": {
+     "flagged": 68,
+     "n": 100,
+     "rate": 0.68
+    },
+    "resize_0.5x": {
+     "flagged": 0,
+     "n": 100,
+     "rate": 0.0
+    }
+   },
+   "patterns": {
+    "saturation_fired_on_test": {
+     "clean": 1,
+     "fgsm_eps2": 0,
+     "fgsm_eps4": 0,
+     "fgsm_eps8": 0,
+     "gaussian_noise": 1,
+     "jpeg_q50": 1,
+     "pgd_eps4": 70,
+     "pgd_eps8": 70,
+     "resize_0.5x": 1
+    }
+   }
+  },
+  {
+   "iteration": "iter2_logistic",
+   "threshold": 0.651,
+   "notes": "logistic regression over 25 features, fitted on train",
+   "detection_rate": 0.87,
+   "false_positive_rate": 0.038,
+   "n_adv": 500,
+   "n_benign": 400,
+   "per_category": {
+    "clean": {
+     "flagged": 8,
+     "n": 100,
+     "rate": 0.08
+    },
+    "fgsm_eps2": {
+     "flagged": 90,
+     "n": 100,
+     "rate": 0.9
+    },
+    "fgsm_eps4": {
+     "flagged": 82,
+     "n": 100,
+     "rate": 0.82
+    },
+    "fgsm_eps8": {
+     "flagged": 65,
+     "n": 100,
+     "rate": 0.65
+    },
+    "gaussian_noise": {
+     "flagged": 3,
+     "n": 100,
+     "rate": 0.03
+    },
+    "jpeg_q50": {
+     "flagged": 3,
+     "n": 100,
+     "rate": 0.03
+    },
+    "pgd_eps4": {
+     "flagged": 99,
+     "n": 100,
+     "rate": 0.99
+    },
+    "pgd_eps8": {
+     "flagged": 99,
+     "n": 100,
+     "rate": 0.99
+    },
+    "resize_0.5x": {
+     "flagged": 1,
+     "n": 100,
+     "rate": 0.01
+    }
+   },
+   "patterns": {
+    "top_weights (standardised)": {
+     "flat_ratio": -6.43,
+     "res_entropy": -3.35,
+     "log_gnorm": -2.26,
+     "sq_l1_jpeg": 1.73,
+     "res_top2_mass": -1.45,
+     "smooth_noise": 1.29,
+     "high_freq_ratio": -1.14,
+     "sq_l1_median": 1.08
+    }
+   }
+  },
+  {
+   "iteration": "iter3_boosted_trees",
+   "threshold": 0.5278,
+   "notes": "gradient-boosted trees (depth 4) over 25 features, fitted on train",
+   "detection_rate": 0.986,
+   "false_positive_rate": 0.01,
+   "n_adv": 500,
+   "n_benign": 400,
+   "per_category": {
+    "clean": {
+     "flagged": 2,
+     "n": 100,
+     "rate": 0.02
+    },
+    "fgsm_eps2": {
+     "flagged": 96,
+     "n": 100,
+     "rate": 0.96
+    },
+    "fgsm_eps4": {
+     "flagged": 99,
+     "n": 100,
+     "rate": 0.99
+    },
+    "fgsm_eps8": {
+     "flagged": 99,
+     "n": 100,
+     "rate": 0.99
+    },
+    "gaussian_noise": {
+     "flagged": 0,
+     "n": 100,
+     "rate": 0.0
+    },
+    "jpeg_q50": {
+     "flagged": 2,
+     "n": 100,
+     "rate": 0.02
+    },
+    "pgd_eps4": {
+     "flagged": 99,
+     "n": 100,
+     "rate": 0.99
+    },
+    "pgd_eps8": {
+     "flagged": 100,
+     "n": 100,
+     "rate": 1.0
+    },
+    "resize_0.5x": {
+     "flagged": 0,
+     "n": 100,
+     "rate": 0.0
+    }
+   },
+   "patterns": {
+    "top_features (val permutation importance, AUC drop)": {
+     "flat_ratio": 0.12,
+     "channel_corr_smooth": 0.032,
+     "res_top2_mass": 0.01,
+     "sq_l1_jpeg": 0.003,
+     "res_entropy": 0.002,
+     "res_nonzero": 0.001,
+     "noise_ratio_scales": 0.001,
+     "sq_l1_bright": 0.001
+    }
+   }
+  },
+  {
+   "iteration": "iter4_noise_robust",
+   "threshold": 0.7139,
+   "notes": "iteration 3 + benign noise augmentation (sigma 0.005/0.02/0.04, random pattern per image) in train and val; same 25 features and model type",
+   "detection_rate": 0.986,
+   "false_positive_rate": 0.005,
+   "n_adv": 500,
+   "n_benign": 400,
+   "per_category": {
+    "clean": {
+     "flagged": 1,
+     "n": 100,
+     "rate": 0.01
+    },
+    "fgsm_eps2": {
+     "flagged": 95,
+     "n": 100,
+     "rate": 0.95
+    },
+    "fgsm_eps4": {
+     "flagged": 99,
+     "n": 100,
+     "rate": 0.99
+    },
+    "fgsm_eps8": {
+     "flagged": 100,
+     "n": 100,
+     "rate": 1.0
+    },
+    "gaussian_noise": {
+     "flagged": 1,
+     "n": 100,
+     "rate": 0.01
+    },
+    "jpeg_q50": {
+     "flagged": 0,
+     "n": 100,
+     "rate": 0.0
+    },
+    "noise_s0.005": {
+     "flagged": 5,
+     "n": 100,
+     "rate": 0.05
+    },
+    "noise_s0.02": {
+     "flagged": 4,
+     "n": 100,
+     "rate": 0.04
+    },
+    "noise_s0.04": {
+     "flagged": 1,
+     "n": 100,
+     "rate": 0.01
+    },
+    "pgd_eps4": {
+     "flagged": 99,
+     "n": 100,
+     "rate": 0.99
+    },
+    "pgd_eps8": {
+     "flagged": 100,
+     "n": 100,
+     "rate": 1.0
+    },
+    "resize_0.5x": {
+     "flagged": 0,
+     "n": 100,
+     "rate": 0.0
+    }
+   },
+   "false_positive_rate_noise_test": 0.033,
+   "iter3_on_same_noise_test": {
+    "overall": 0.193,
+    "noise_s0.005": 0.27,
+    "noise_s0.02": 0.31,
+    "noise_s0.04": 0.0
+   },
+   "patterns": {
+    "top_features (val permutation importance, AUC drop)": {
+     "flat_ratio": 0.111,
+     "channel_corr_smooth": 0.076,
+     "res_nonzero": 0.016,
+     "res_top2_mass": 0.013,
+     "sq_l1_bright": 0.004,
+     "sq_l1_jpeg": 0.003,
+     "entropy": 0.003,
+     "res_entropy": 0.001
+    }
+   }
+  }
+ ],
+ "final_export_counts": {
+  "train_in-sample/fgsm_eps2": 150,
+  "train_in-sample/fgsm_eps4": 150,
+  "train_in-sample/fgsm_eps8": 150,
+  "train_in-sample/pgd_eps4": 150,
+  "train_in-sample/pgd_eps8": 150,
+  "val/fgsm_eps2": 45,
+  "val/fgsm_eps4": 49,
+  "val/fgsm_eps8": 50,
+  "val/pgd_eps8": 50,
+  "val/pgd_eps4": 47,
+  "test/fgsm_eps2": 95,
+  "test/fgsm_eps4": 99,
+  "test/fgsm_eps8": 100,
+  "test/pgd_eps8": 100,
+  "test/pgd_eps4": 99
+ },
+ "final_model": "iter4_noise_robust"
+}

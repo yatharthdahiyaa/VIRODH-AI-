@@ -1,0 +1,5 @@
+name: "canary_qr"
+
+parameters:
+  technique: qr
+  faint_gray: 222

@@ -1,0 +1,30 @@
+﻿# .understandignore for threat-guard / Virodh AI — analyse OUR code only.
+# Upstream OmniSafeBench-MM (attributed, unmodified apart from one bug fix)
+/attacks/
+/core/
+/models/
+/pipeline/
+/evaluators/
+/defenses/
+/utils/
+/run_pipeline.py
+/config/config_loader.py
+/config/run_*.yaml
+/config/_gen_*.yaml
+# datasets, generated outputs, caches, build artefacts
+/data/
+/output/
+/logs/
+/eval/reports/
+/web/dist/
+**/node_modules/
+.venv/
+.pytest_cache/
+**/__pycache__/
+*.joblib
+*.db
+*.lock
+pnpm-lock.yaml
+package-lock.json
+.ruff_cache/
+.prettierrc.json

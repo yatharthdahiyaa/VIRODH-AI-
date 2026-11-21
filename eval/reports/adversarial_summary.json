@@ -1,0 +1,249 @@
+{
+ "model": "resnet18 (local) + gradient-boosted trees over 25 features (iter4_noise_robust)",
+ "headline": {
+  "adversarial detection rate (test, FGSM+PGD)": "99% (n=500)",
+  "false positives (test benign: clean + controls)": "0.5% (n=400)",
+  "baseline before the loop": "9.2% detection",
+  "UNSEEN weak Gaussian noise (sigma 0.01) flagged": "50% (round 3: 74%)",
+  "NEW noise types never trained on, flagged": "max 41%"
+ },
+ "tables": [
+  {
+   "title": "Improvement loop — test split (fitted on train, threshold on val)",
+   "columns": [
+    "iteration",
+    "detection",
+    "false positives",
+    "fgsm_eps2",
+    "fgsm_eps4",
+    "fgsm_eps8",
+    "pgd_eps4",
+    "pgd_eps8",
+    "clean",
+    "gaussian_noise",
+    "jpeg_q50",
+    "resize_0.5x"
+   ],
+   "rows": [
+    [
+     "iter0_baseline",
+     "9.2%",
+     "3.2%",
+     "9.0%",
+     "11%",
+     "8.0%",
+     "9.0%",
+     "9.0%",
+     "2.0%",
+     "11%",
+     "0%",
+     "0%"
+    ],
+    [
+     "iter1_saturation",
+     "33%",
+     "2.0%",
+     "9.0%",
+     "11%",
+     "7.0%",
+     "69%",
+     "68%",
+     "3.0%",
+     "5.0%",
+     "0%",
+     "0%"
+    ],
+    [
+     "iter2_logistic",
+     "87%",
+     "3.8%",
+     "90%",
+     "82%",
+     "65%",
+     "99%",
+     "99%",
+     "8.0%",
+     "3.0%",
+     "3.0%",
+     "1.0%"
+    ],
+    [
+     "iter3_boosted_trees",
+     "99%",
+     "1.0%",
+     "96%",
+     "99%",
+     "99%",
+     "99%",
+     "100%",
+     "2.0%",
+     "0%",
+     "2.0%",
+     "0%"
+    ],
+    [
+     "iter4_noise_robust",
+     "99%",
+     "0.5%",
+     "95%",
+     "99%",
+     "100%",
+     "99%",
+     "100%",
+     "1.0%",
+     "1.0%",
+     "0%",
+     "0%"
+    ]
+   ]
+  },
+  {
+   "title": "Round 4 fix — harmless noisy TEST photos (strengths used in training, unseen images)",
+   "columns": [
+    "noise",
+    "n",
+    "flagged by round 3",
+    "flagged by round 4"
+   ],
+   "rows": [
+    [
+     "noise_s0.005",
+     100,
+     "27%",
+     "5.0%"
+    ],
+    [
+     "noise_s0.02",
+     100,
+     "31%",
+     "4.0%"
+    ],
+    [
+     "noise_s0.04",
+     100,
+     "0%",
+     "1.0%"
+    ],
+    [
+     "all",
+     300,
+     "19%",
+     "3.3%"
+    ]
+   ]
+  },
+  {
+   "title": "Stress test — conditions no model was trained on (100 test sources; benign rows = false alarms, attack rows = detection)",
+   "columns": [
+    "condition",
+    "n",
+    "round 3",
+    "round 4 (live)"
+   ],
+   "rows": [
+    [
+     "attack: fgsm_eps1",
+     100,
+     "17%",
+     "3.0%"
+    ],
+    [
+     "attack: fgsm_eps16",
+     100,
+     "98%",
+     "98%"
+    ],
+    [
+     "attack: pgd_eps2_10steps",
+     100,
+     "88%",
+     "27%"
+    ],
+    [
+     "attack: pgd_eps8_no_random_start",
+     100,
+     "100%",
+     "100%"
+    ],
+    [
+     "benign: NEW grey_noise_0.02",
+     100,
+     "100%",
+     "41%"
+    ],
+    [
+     "benign: NEW noise+jpeg85",
+     100,
+     "36%",
+     "16%"
+    ],
+    [
+     "benign: NEW shot_noise",
+     100,
+     "48%",
+     "10%"
+    ],
+    [
+     "benign: NEW uniform_0.03",
+     100,
+     "41%",
+     "6.0%"
+    ],
+    [
+     "benign: bicubic_up_down",
+     100,
+     "1.0%",
+     "1.0%"
+    ],
+    [
+     "benign: blur_3x3",
+     100,
+     "0%",
+     "0%"
+    ],
+    [
+     "benign: contrast_0.8_bright+0.05",
+     100,
+     "1.0%",
+     "1.0%"
+    ],
+    [
+     "benign: gauss_0.01",
+     100,
+     "74%",
+     "50%"
+    ],
+    [
+     "benign: gauss_0.05",
+     100,
+     "0%",
+     "0%"
+    ],
+    [
+     "benign: jpeg_q30",
+     100,
+     "0%",
+     "0%"
+    ],
+    [
+     "benign: jpeg_q90",
+     100,
+     "3.0%",
+     "2.0%"
+    ],
+    [
+     "benign: speckle_1%",
+     100,
+     "4.0%",
+     "8.0%"
+    ]
+   ]
+  }
+ ],
+ "notes": [
+  "Detected patterns (permutation importance): loss of perfectly flat areas (flat_ratio), cross-channel noise correlation in flat regions (channel_corr_smooth), share and discreteness of non-zero noise levels (res_nonzero, res_top2_mass), and how the classifier reacts to squeezes (brightness, JPEG).",
+  "Round 4 changed only the training data: harmless Gaussian noise at sigma 0.005/0.02/0.04 with a fresh random pattern per image (round 3 had seen one fixed noise pattern), so the model learns attack noise rather than 'any noise that differs from the control'.",
+  "Trade-off of round 4: fewer false alarms on noisy photos, but very weak UNSEEN attacks are caught less often (PGD 2/255: 88% -> 27%; FGSM 1/255: 17% -> 3.0%). Perturbations of 1-2 grey levels look like weak sensor noise to these features. Round 3 is kept as config/adversarial_model_iter3.joblib for rollback.",
+  "Controlled simulation against a LOCAL ResNet18; not evidence of attacks on hosted VLMs; does not name the attack family. Adaptive attackers who know these features can evade them (Carlini & Wagner, 2017)."
+ ]
+}

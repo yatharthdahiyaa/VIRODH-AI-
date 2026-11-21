@@ -1,0 +1,356 @@
+[
+ {
+  "label": "2 workers (Windows LB)",
+  "base": "http://127.0.0.1:8080",
+  "at": "2026-11-22 01:52:19",
+  "scenarios": {
+   "cached": {
+    "requests": 400,
+    "concurrency": 32,
+    "wall_s": 1.44,
+    "throughput_rps": 278.5,
+    "ok_rps": 278.5,
+    "p50_ms": 46.0,
+    "p95_ms": 421.6,
+    "p99_ms": 904.8,
+    "max_ms": 959.3,
+    "status": {
+     "200": 400
+    },
+    "actions": {
+     "forwarded": 400
+    },
+    "by_worker": {
+     "18900": 343,
+     "24236": 57
+    }
+   },
+   "ocr": {
+    "requests": 60,
+    "concurrency": 8,
+    "wall_s": 30.68,
+    "throughput_rps": 1.96,
+    "ok_rps": 1.96,
+    "p50_ms": 4496.4,
+    "p95_ms": 6007.5,
+    "p99_ms": 6583.6,
+    "max_ms": 6802.9,
+    "status": {
+     "200": 60
+    },
+    "actions": {
+     "forwarded": 60
+    },
+    "by_worker": {
+     "18900": 34,
+     "24236": 26
+    }
+   },
+   "burst": {
+    "requests": 150,
+    "concurrency": 150,
+    "wall_s": 24.23,
+    "throughput_rps": 6.19,
+    "ok_rps": 1.86,
+    "p50_ms": 820.0,
+    "p95_ms": 21053.6,
+    "p99_ms": 24195.8,
+    "max_ms": 24214.4,
+    "status": {
+     "503": 105,
+     "200": 45
+    },
+    "actions": {
+     "error": 105,
+     "forwarded": 45
+    },
+    "by_worker": {
+     "18900": 74,
+     "24236": 76
+    }
+   }
+  }
+ },
+ {
+  "label": "1 worker",
+  "base": "http://127.0.0.1:8080",
+  "at": "2026-11-22 01:54:07",
+  "scenarios": {
+   "cached": {
+    "requests": 400,
+    "concurrency": 32,
+    "wall_s": 1.61,
+    "throughput_rps": 248.21,
+    "ok_rps": 248.21,
+    "p50_ms": 85.9,
+    "p95_ms": 351.3,
+    "p99_ms": 466.4,
+    "max_ms": 678.5,
+    "status": {
+     "200": 400
+    },
+    "actions": {
+     "forwarded": 400
+    },
+    "by_worker": {
+     "24840": 400
+    }
+   },
+   "ocr": {
+    "requests": 60,
+    "concurrency": 8,
+    "wall_s": 30.39,
+    "throughput_rps": 1.97,
+    "ok_rps": 1.97,
+    "p50_ms": 3926.6,
+    "p95_ms": 4501.7,
+    "p99_ms": 4566.6,
+    "max_ms": 4571.2,
+    "status": {
+     "200": 60
+    },
+    "actions": {
+     "forwarded": 60
+    },
+    "by_worker": {
+     "24840": 60
+    }
+   },
+   "burst": {
+    "requests": 80,
+    "concurrency": 80,
+    "wall_s": 17.91,
+    "throughput_rps": 4.47,
+    "ok_rps": 2.01,
+    "p50_ms": 330.6,
+    "p95_ms": 16033.1,
+    "p99_ms": 17726.5,
+    "max_ms": 17905.3,
+    "status": {
+     "503": 44,
+     "200": 36
+    },
+    "actions": {
+     "error": 44,
+     "forwarded": 36
+    },
+    "by_worker": {
+     "24840": 80
+    }
+   }
+  }
+ },
+ {
+  "label": "1 worker cpu-probe",
+  "base": "http://127.0.0.1:8080",
+  "at": "2026-11-22 01:55:17",
+  "scenarios": {
+   "cached": {
+    "requests": 10,
+    "concurrency": 32,
+    "wall_s": 0.02,
+    "throughput_rps": 453.85,
+    "ok_rps": 453.85,
+    "p50_ms": 19.8,
+    "p95_ms": 20.4,
+    "p99_ms": 20.4,
+    "max_ms": 20.4,
+    "status": {
+     "200": 10
+    },
+    "actions": {
+     "forwarded": 10
+    },
+    "by_worker": {
+     "24840": 10
+    }
+   },
+   "ocr": {
+    "requests": 40,
+    "concurrency": 8,
+    "wall_s": 16.64,
+    "throughput_rps": 2.4,
+    "ok_rps": 2.4,
+    "p50_ms": 3317.4,
+    "p95_ms": 3560.8,
+    "p99_ms": 3595.4,
+    "max_ms": 3595.4,
+    "status": {
+     "200": 40
+    },
+    "actions": {
+     "forwarded": 40
+    },
+    "by_worker": {
+     "24840": 40
+    }
+   },
+   "burst": {
+    "requests": 1,
+    "concurrency": 1,
+    "wall_s": 0.45,
+    "throughput_rps": 2.22,
+    "ok_rps": 2.22,
+    "p50_ms": 451.2,
+    "p95_ms": 451.2,
+    "p99_ms": 451.2,
+    "max_ms": 451.2,
+    "status": {
+     "200": 1
+    },
+    "actions": {
+     "forwarded": 1
+    },
+    "by_worker": {
+     "24840": 1
+    }
+   }
+  }
+ },
+ {
+  "label": "3 workers (Windows LB, 4 threads each)",
+  "base": "http://127.0.0.1:8080",
+  "at": "2026-11-22 01:56:47",
+  "scenarios": {
+   "cached": {
+    "requests": 400,
+    "concurrency": 32,
+    "wall_s": 0.8,
+    "throughput_rps": 503.05,
+    "ok_rps": 503.05,
+    "p50_ms": 39.5,
+    "p95_ms": 230.9,
+    "p99_ms": 287.1,
+    "max_ms": 305.5,
+    "status": {
+     "200": 400
+    },
+    "actions": {
+     "forwarded": 400
+    },
+    "by_worker": {
+     "24804": 127,
+     "29388": 130,
+     "21680": 143
+    }
+   },
+   "ocr": {
+    "requests": 60,
+    "concurrency": 8,
+    "wall_s": 38.9,
+    "throughput_rps": 1.54,
+    "ok_rps": 1.54,
+    "p50_ms": 4133.4,
+    "p95_ms": 11082.2,
+    "p99_ms": 12116.8,
+    "max_ms": 13279.5,
+    "status": {
+     "200": 60
+    },
+    "actions": {
+     "forwarded": 60
+    },
+    "by_worker": {
+     "21680": 13,
+     "29388": 24,
+     "24804": 23
+    }
+   },
+   "burst": {
+    "requests": 120,
+    "concurrency": 120,
+    "wall_s": 23.51,
+    "throughput_rps": 5.1,
+    "ok_rps": 1.7,
+    "p50_ms": 20365.4,
+    "p95_ms": 22284.1,
+    "p99_ms": 23227.2,
+    "max_ms": 23497.9,
+    "status": {
+     "503": 80,
+     "200": 40
+    },
+    "actions": {
+     "error": 80,
+     "forwarded": 40
+    },
+    "by_worker": {
+     "24804": 40,
+     "29388": 40,
+     "21680": 40
+    }
+   }
+  }
+ },
+ {
+  "label": "3 workers, adversarial off",
+  "base": "http://127.0.0.1:8080",
+  "at": "2026-11-22 01:58:13",
+  "scenarios": {
+   "cached": {
+    "requests": 50,
+    "concurrency": 32,
+    "wall_s": 0.12,
+    "throughput_rps": 424.44,
+    "ok_rps": 424.44,
+    "p50_ms": 40.3,
+    "p95_ms": 112.0,
+    "p99_ms": 112.0,
+    "max_ms": 112.0,
+    "status": {
+     "200": 50
+    },
+    "actions": {
+     "forwarded": 50
+    },
+    "by_worker": {
+     "24804": 29,
+     "29388": 11,
+     "21680": 10
+    }
+   },
+   "ocr": {
+    "requests": 60,
+    "concurrency": 8,
+    "wall_s": 23.93,
+    "throughput_rps": 2.51,
+    "ok_rps": 2.51,
+    "p50_ms": 3223.0,
+    "p95_ms": 4023.1,
+    "p99_ms": 4375.3,
+    "max_ms": 4376.9,
+    "status": {
+     "200": 60
+    },
+    "actions": {
+     "forwarded": 60
+    },
+    "by_worker": {
+     "29388": 20,
+     "21680": 19,
+     "24804": 21
+    }
+   },
+   "burst": {
+    "requests": 1,
+    "concurrency": 1,
+    "wall_s": 0.47,
+    "throughput_rps": 2.11,
+    "ok_rps": 2.11,
+    "p50_ms": 473.7,
+    "p95_ms": 473.7,
+    "p99_ms": 473.7,
+    "max_ms": 473.7,
+    "status": {
+     "200": 1
+    },
+    "actions": {
+     "forwarded": 1
+    },
+    "by_worker": {
+     "24804": 1
+    }
+   }
+  }
+ }
+]

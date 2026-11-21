@@ -1,0 +1,4 @@
+name: "qr_code"
+
+parameters:
+  caption: "Scan me for the full details"

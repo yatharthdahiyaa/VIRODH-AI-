@@ -1,0 +1,120 @@
+# Virodh AI gateway configuration.
+# Clients call Virodh exactly like an OpenAI-compatible API (base_url = http://<virodh>/v1).
+# Virodh inspects every request with the Threat Guard engine, applies the API key's policy,
+# forwards allowed requests to the upstream provider, checks the reply, and logs the decision.
+#
+# Provider keys are NEVER written here: each upstream names the environment variable that holds it.
+# Every value under `server:` can be overridden with an env var (VIRODH_<UPPERCASE_NAME>), for containers.
+
+server:
+  max_body_mb: 12                 # request body cap (images are base64 → ~1.37x their size)
+  max_image_mb: 8                 # per decoded image (matches guard ingress.max_image_bytes)
+  max_images_per_request: 4
+  max_scan_units: 16              # text chunks + images inspected per request (conversation history included)
+  max_concurrent_scans: 4         # per worker process; inspection is CPU (OCR) + hosted classifiers
+  max_scan_queue: 32              # requests allowed to wait for a scan slot; beyond this → 503 immediately
+  scan_queue_timeout_s: 20        # waiting longer than this for a slot → 503 + Retry-After (load shedding)
+  scan_timeout_s: 75              # one inspection; on timeout the request is NOT forwarded (fail-closed)
+  upstream_timeout_s: 90
+  upstream_max_connections: 200
+  cache_ttl_s: 3600               # identical (text, image) inspections are reused for this long
+  cache_max_entries: 4000
+  allow_remote_images: false      # true = fetch http(s) image URLs (public IPs only); default: data: URLs only
+  remote_image_timeout_s: 6
+  breaker_failures: 5             # consecutive upstream failures that open the circuit...
+  breaker_cooldown_s: 20          # ...for this long (fast 503 instead of piling up timeouts)
+
+storage:
+  db: data/virodh/virodh.db       # SQLite (WAL): keys, policies, request log, rate-limit windows
+  retention_days: 30
+  log_prompt_preview: true        # store the first 160 chars of the user's text. LOCAL DEMO ONLY:
+                                  # set false in production (only hashes are stored then).
+
+admin:
+  token_env: VIRODH_ADMIN_TOKEN   # console/admin API token (header X-Virodh-Admin-Token)
+  allow_loopback_without_token: true   # localhost may use the console without a token (never via a proxy)
+  playground_rpm: 30
+
+upstreams:
+  gemini:     {base_url: "https://generativelanguage.googleapis.com/v1beta/openai", api_key_env: GEMINI_API_KEY}
+  groq:       {base_url: "https://api.groq.com/openai/v1", api_key_env: GROQ_API_KEY}
+  openrouter: {base_url: "https://openrouter.ai/api/v1", api_key_env: OPENROUTER_API_KEY}
+  mock:       {type: mock}        # offline echo model: load tests and demos without provider quota
+
+# Public model ids clients send in "model" → upstream + the provider's model name.
+models:
+  gemini-3.1-flash-lite:
+    upstream: gemini
+    model: gemini-3.1-flash-lite
+    label: "Gemini 3.1 Flash-Lite"
+    default_max_tokens: 500
+  gemini-3.5-flash-lite:
+    upstream: gemini
+    model: gemini-3.5-flash-lite
+    label: "Gemini 3.5 Flash-Lite"
+    default_max_tokens: 500
+  qwen3.8-27b:
+    upstream: groq
+    model: qwen/qwen3.8-27b
+    label: "Qwen 3.8 27B (Groq)"
+    default_max_tokens: 500
+    max_tokens_cap: 1000          # Groq on-demand: 8k tokens/min for this model
+  nemotron-3.5-super-vl:
+    upstream: openrouter
+    model: "nvidia/nemotron-3.5-super-vl:free"
+    label: "Nemotron 3.5 Super VL (OpenRouter free)"
+    default_max_tokens: 1500      # reasoning model: hidden reasoning tokens come first
+  gemma-4-26b:
+    upstream: openrouter
+    model: "google/gemma-4-26b-a4b-it:free"
+    label: "Gemma 4 26B (OpenRouter free)"
+    default_max_tokens: 500
+  virodh-echo:
+    upstream: mock
+    model: echo
+    label: "Echo (offline test model)"
+
+default_model: gemini-3.1-flash-lite
+
+# Policy profiles seeded into the database on first start (then edited in the console).
+policies:
+  default:
+    description: "Enforce: block BLOCK and REVIEW decisions, check replies, wrap images as untrusted."
+    mode: enforce
+    review_action: block
+    block_response: refusal
+    output_guard: true
+    envelope: true
+    adversarial: flag
+  monitor:
+    description: "Shadow mode: inspect and log everything, never block. For rollout and tuning."
+    mode: monitor
+    review_action: forward
+    block_response: refusal
+    output_guard: true
+    envelope: true
+    adversarial: flag
+  public-sector-strict:
+    description: "Strict: REVIEW is blocked, adversarial-image findings are enforced, blocked requests get an API error."
+    mode: enforce
+    review_action: block
+    block_response: error
+    output_guard: true
+    envelope: true
+    adversarial: enforce
+  exam-integrity:
+    description: "For exam and assessment platforms: also refuses to solve exam or test papers."
+    mode: enforce
+    review_action: block
+    block_response: refusal
+    output_guard: true
+    envelope: true
+    adversarial: flag
+    denied_topics:
+      - name: exam_integrity
+        action: block
+        description: >-
+          Solving, answering or completing the questions of an examination, test, quiz or assessment paper
+          (signs: numbered questions with marks, time allowed, roll number, instructions to candidates, or the
+          user asking to answer the questions shown in an image of such a paper). Explaining a general concept
+          without solving the paper's questions is allowed.

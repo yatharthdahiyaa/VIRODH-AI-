@@ -1,0 +1,4 @@
+name: "threat_guard"
+
+# Guard settings live in config/guard.yaml
+parameters: {}
