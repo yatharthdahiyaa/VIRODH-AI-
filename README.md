@@ -229,16 +229,30 @@ export GEMINI_API_KEY="AQ.A..."
 export OPENROUTER_API_KEY="sk-or-..."
 ```
 
-### 3. Run the Virodh Gateway & Web Dashboard
+### 3. Run the Untangled Server & Management Dashboard
+
+Virodh AI features an untangled, unified dual-server architecture:
+1. **Core Gateway Engine (`virodh.server:app`)**: High-performance Python FastAPI engine running the `/v1` AI firewall, `/admin/api/*` console endpoints, `/api/*` research lab, and zero-service SQLite WAL persistence.
+2. **Management Dashboard & BFF (`server/src/index.js`)**: Express + Node.js backend on port 3000 hosting authentication, role-based access control, session security, and serving the React dashboard (`web/dist` or Vite on `:5173`).
 
 ```powershell
-# Start the FastAPI gateway + Dashboard on port 8000
-.venv\Scripts\python -m uvicorn app.main:app --port 8000 --reload
+# 1. Start the Python Gateway Engine (Port 8000)
+.venv\Scripts\python -m uvicorn virodh.server:app --port 8000 --reload
+
+# 2. In a separate terminal, start the Node.js Management Dashboard (Port 3000)
+cd server
+node src/index.js
+# -> Dashboard live on http://localhost:3000 (connected to engine http://127.0.0.1:8000)
+
+# 3. Optional: Start Vite React Dev Server for UI development (Port 5173)
+cd web
+npm run dev
 ```
 
-* **Dashboard:** [http://127.0.0.1:8000](http://127.0.0.1:8000)
+* **Production Management Console:** [http://localhost:3000](http://localhost:3000)
+* **Python Engine Console:** [http://127.0.0.1:8000/console](http://127.0.0.1:8000/console)
 * **Interactive OpenAPI Docs:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-* **System Health Check:** [http://127.0.0.1:8000/api/system/health](http://127.0.0.1:8000/api/system/health)
+* **System Health Check:** [http://127.0.0.1:8000/readyz](http://127.0.0.1:8000/readyz)
 
 ### 4. Run the Test Suite
 
