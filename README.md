@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/threat_guard_full_architecture.png" alt="Virodh AI / Threat Guard Full Architecture" width="100%" />
+  <img src="docs/assets/understanding_dashboard_overview.png" alt="Virodh AI Architecture & Code Knowledge Graph (Understand-Anything)" width="100%" />
 </p>
 
 <h1 align="center">🛡️ VIRODH AI (Threat Guard)</h1>

@@ -1,4 +1,4 @@
-﻿# Open the Understand-Anything interactive dashboard for Virodh AI (Threat Guard).
+# Open the Understand-Anything interactive dashboard for Virodh AI (Threat Guard).
 #   powershell -ExecutionPolicy Bypass -File .\open-dashboard.ps1
 #
 # The knowledge graph lives in threat-guard\.ua\ (next to source code for interactive file viewing);
