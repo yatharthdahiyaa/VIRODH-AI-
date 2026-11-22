@@ -180,16 +180,30 @@ Load-testing benchmarks demonstrate sub-millisecond gateway overhead, steady con
 
 ---
 
-## 🔍 Interactive Architecture & Call Graph
+## 🌐 Interactive Understanding Server & Knowledge Graph
 
-This repository includes a deterministic function call graph generated using **Understand-Anything**:
+This repository includes a deterministic code knowledge graph and interactive architectural visualizer generated using **Understand-Anything**:
 
-* **Detailed Call Hierarchy:** [docs/CALL_GRAPH.md](docs/CALL_GRAPH.md) lists every caller-callee link with line numbers.
-* **Architecture Mapping:** [docs/understanding/ARCHITECTURE.md](docs/understanding/ARCHITECTURE.md) outlines the 10 structural layers and 15 tour steps.
-* **Interactive Knowledge Graph:** Launch the interactive browser dashboard:
-  ```powershell
-  powershell -ExecutionPolicy Bypass -File docs/understanding/open-dashboard.ps1
-  ```
+<p align="center">
+  <img src="docs/assets/understanding_dashboard_overview.png" alt="Understand-Anything Interactive Architecture Dashboard" width="100%" />
+</p>
+
+### Features of the Understanding Dashboard
+* **Full Codebase Knowledge Graph**: Visualizes all 116 modules, 594 nodes, and cross-file dependencies in real time.
+* **Architecture Layer Navigator**: Explore the 10 structural defense layers and 15 guided architectural tour steps.
+* **Interactive Call Hierarchy**: Click on any component to view its caller-callee execution path, imported types, and security controls.
+* **Integrated Code Viewer**: Inspect source files, interfaces, and lessons directly alongside the interactive graph.
+
+### How to Run the Understanding Server
+
+```powershell
+# Launch the interactive Understand-Anything visualization server
+powershell -ExecutionPolicy Bypass -File docs/understanding/open-dashboard.ps1
+```
+
+* **Dashboard URL:** [http://127.0.0.1:5174/?token=virodh-understanding-token](http://127.0.0.1:5174/?token=virodh-understanding-token)
+* **Persistent Graph Artifacts:** Stored in [docs/understanding/](docs/understanding/) (`knowledge-graph.json`, `code-lessons.json`, `ARCHITECTURE.md`).
+* **Deterministic Call Hierarchy:** See [docs/CALL_GRAPH.md](docs/CALL_GRAPH.md) for complete caller-callee links with exact line numbers.
 
 ---
 
